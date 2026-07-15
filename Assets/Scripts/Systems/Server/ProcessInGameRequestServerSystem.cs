@@ -14,8 +14,6 @@ partial struct ProcessInGameRequestServerSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<InGameRequestRPC>();
-
-        
     }
 
     [BurstCompile]
@@ -63,5 +61,4 @@ partial struct ProcessInGameRequestServerSystem : ISystem
             NetworkId = networkID.Value
         });
     }
-
 }

@@ -45,6 +45,7 @@ partial struct ScoreSystem : ISystem
         }
         allPlayerEntities.Dispose();
     }
+
     private void RespawnPlayer(in Entity entity, ref LocalTransform localTransform, ref PhysicsVelocity physicsVelocity, NetworkTime networkTime)
     {
         var random = Unity.Mathematics.Random.CreateFromIndex(networkTime.ServerTick.TickIndexForValidTick ^ (uint)entity.Index + 1);
@@ -58,6 +59,7 @@ partial struct ScoreSystem : ISystem
         physicsVelocity.Linear = float3.zero;
         physicsVelocity.Angular = float3.zero;
     }
+
     private void Score(in Entity fallenEntity, NativeArray<Entity> allPlayerEntities, ref DynamicBuffer<ScoreBuffer> scoreBuffer, ref SystemState state)
     {
         if (SystemAPI.HasComponent<HostPlayerTag>(fallenEntity))
@@ -70,7 +72,7 @@ partial struct ScoreSystem : ISystem
                 clientScore = ++clientCurrentScore
             });
         }
-        else if (allPlayerEntities[1] == fallenEntity)
+        else
         {
             scoreBuffer.Add(new ScoreBuffer
             {

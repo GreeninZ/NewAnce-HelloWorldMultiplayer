@@ -17,7 +17,7 @@ partial struct PlayerMoveSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (playerInput, movementSpecs,physicsVelocity) in SystemAPI.Query<RefRO<PlayerInputComponent>, RefRO<PlayerMovementSpecsComponent>,RefRW<PhysicsVelocity>>().WithAll<GhostOwnerIsLocal,Simulate>())
+        foreach (var (playerInput, movementSpecs,physicsVelocity) in SystemAPI.Query<RefRO<PlayerInputComponent>, RefRO<PlayerMovementSpecsComponent>, RefRW<PhysicsVelocity>>().WithAll<GhostOwnerIsLocal,Simulate>())
         {
             var moveVec = new float3(playerInput.ValueRO.moveVector.x, 0f, playerInput.ValueRO.moveVector.y);
             moveVec = math.normalizesafe(moveVec);

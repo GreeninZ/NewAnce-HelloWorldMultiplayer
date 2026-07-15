@@ -1,4 +1,3 @@
-using UnityEngine;
 using Unity.NetCode;
 public class Bootstrap : ClientServerBootstrap
 {
