@@ -34,13 +34,11 @@ partial struct ScoreSystem : ISystem
 
         foreach (var (localTransform, physicsVelocity, entity) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>>().WithAll<PlayerInputComponent>().WithEntityAccess())
         {
-            allPlayerEntities = SystemAPI.QueryBuilder().WithAll<PlayerInputComponent>().Build().ToEntityArray(Allocator.Temp);
-
             if (localTransform.ValueRO.Position.y < -5f)
             {
                 RespawnPlayer(entity, ref localTransform.ValueRW, ref physicsVelocity.ValueRW, networkTime);
 
-                Score(entity, allPlayerEntities, ref scoreBuffer, ref state);
+                Score(entity, ref scoreBuffer, ref state);
             }
         }
         allPlayerEntities.Dispose();
@@ -60,14 +58,12 @@ partial struct ScoreSystem : ISystem
         physicsVelocity.Angular = float3.zero;
     }
 
-    private void Score(in Entity fallenEntity, NativeArray<Entity> allPlayerEntities, ref DynamicBuffer<ScoreBuffer> scoreBuffer, ref SystemState state)
+    private void Score(in Entity fallenEntity, ref DynamicBuffer<ScoreBuffer> scoreBuffer, ref SystemState state)
     {
         if (SystemAPI.HasComponent<HostPlayerTag>(fallenEntity))
         {
             scoreBuffer.Add(new ScoreBuffer
             {
-                hostEntity = allPlayerEntities[0],
-                clientEntity = allPlayerEntities[1],
                 hostScore = hostCurrentScore,
                 clientScore = ++clientCurrentScore
             });
@@ -76,8 +72,6 @@ partial struct ScoreSystem : ISystem
         {
             scoreBuffer.Add(new ScoreBuffer
             {
-                hostEntity = allPlayerEntities[0],
-                clientEntity = allPlayerEntities[1],
                 hostScore = ++hostCurrentScore,
                 clientScore = clientCurrentScore
             });
